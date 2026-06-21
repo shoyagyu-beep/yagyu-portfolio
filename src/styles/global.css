@@ -1,1 +1,45 @@
 @import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+JP:wght@300;400;500&display=swap');
+
+:root {
+  --font-latin: 'EB Garamond', Georgia, serif;
+  --font-ja: 'Noto Serif JP', 'Yu Mincho', serif;
+  --color-ink: #1a1a1a;
+  --color-muted: #888;
+  --color-faint: #ccc;
+  --color-bg: #ffffff;
+  --col-left-width: 30%;
+}
+
+@theme {
+  --font-latin: 'EB Garamond', Georgia, serif;
+  --font-ja: 'Noto Serif JP', 'Yu Mincho', serif;
+  --color-ink: #1a1a1a;
+  --color-muted: #888888;
+  --color-faint: #cccccc;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-latin);
+  color: var(--color-ink);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:lang(ja) {
+  font-family: var(--font-ja);
+}
