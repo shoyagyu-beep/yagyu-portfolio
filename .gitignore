@@ -25,3 +25,10 @@ pnpm-debug.log*
 
 # superpowers local config
 .superpowers/
+
+# Claude Code local settings
+.claude/
+
+# environment variable overrides
+.env.local
+.env.development
