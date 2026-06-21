@@ -1,0 +1,14 @@
+# .github/workflows/scheduled-rebuild.yml
+name: Scheduled Rebuild
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  trigger-rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cloudflare Pages deploy
+        run: curl -X POST "${{ secrets.CF_PAGES_DEPLOY_HOOK_URL }}"
