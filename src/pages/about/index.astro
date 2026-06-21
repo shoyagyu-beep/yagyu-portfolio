@@ -1,0 +1,110 @@
+---
+// src/pages/about/index.astro
+import Site from '../../layouts/Site.astro';
+import ENToggle from '../../components/ENToggle.astro';
+import { aboutJa } from '../../data/about';
+
+const about = aboutJa;
+const sections = ['Biography', 'Statement', '展示歴', '出版歴', 'Contact'];
+---
+
+<Site title="About — YAGYU SHAW" currentPath="/about">
+  <ul slot="left-list" class="about-nav" role="list">
+    {sections.map((s) => (
+      <li>
+        <a href={`#${s}`} class="about-nav-link">{s}</a>
+      </li>
+    ))}
+  </ul>
+
+  <div slot="right-content" class="about-content">
+    <ENToggle currentLang="ja" jaHref="/about" enHref="/en/about" />
+
+    <section id="Biography" class="about-section">
+      <h2 class="section-label">Biography</h2>
+      <p class="bio-text">{about.bioLong}</p>
+    </section>
+
+    <section id="Statement" class="about-section">
+      <h2 class="section-label">Statement</h2>
+      <p class="bio-text">{about.artistStatement}</p>
+    </section>
+
+    <section id="展示歴" class="about-section">
+      <details class="accordion">
+        <summary class="accordion-toggle">＋ 展示歴</summary>
+        <ul class="history-list">
+          {about.exhibitionHistory
+            .filter((ex) => ex.type === 'Exhibition')
+            .map((ex) => (
+              <li>
+                <time>{ex.date}</time> — {ex.title}
+                {ex.venueOrPublisher && <span>, {ex.venueOrPublisher}</span>}
+              </li>
+            ))}
+        </ul>
+      </details>
+    </section>
+
+    <section id="出版歴" class="about-section">
+      <details class="accordion">
+        <summary class="accordion-toggle">＋ 出版歴</summary>
+        <ul class="history-list">
+          {about.exhibitionHistory
+            .filter((ex) => ['Book', 'Zine', 'Collaboration'].includes(ex.type))
+            .map((ex) => (
+              <li>
+                <time>{ex.date}</time> — {ex.title}
+                {ex.venueOrPublisher && <span>, {ex.venueOrPublisher}</span>}
+              </li>
+            ))}
+        </ul>
+      </details>
+    </section>
+
+    <section id="Contact" class="about-section">
+      <h2 class="section-label">Contact</h2>
+      <a href={`mailto:${about.contactEmail}`} class="contact-email">
+        {about.contactEmail}
+      </a>
+      {about.commercialNote && (
+        <p class="commercial-note">
+          {about.commercialNote.link ? (
+            <a href={about.commercialNote.link} target="_blank" rel="noopener">
+              {about.commercialNote.text}
+            </a>
+          ) : (
+            about.commercialNote.text
+          )}
+        </p>
+      )}
+    </section>
+  </div>
+</Site>
+
+<style>
+  .about-nav { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.6rem; }
+  .about-nav-link { font-family:var(--font-ja); font-size:0.85rem; color:var(--color-muted); transition:color 0.15s; }
+  .about-nav-link:hover { color:var(--color-ink); }
+
+  .about-content { padding:2rem 2.5rem 4rem; max-width:640px; position:relative; height:100dvh; overflow-y:auto; }
+
+  .about-section { margin-bottom:3rem; }
+
+  .section-label { font-family:var(--font-latin); font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-muted); font-weight:400; margin:0 0 1rem; }
+
+  .bio-text { font-family:var(--font-ja); font-size:0.9rem; line-height:2; color:#333; margin:0; }
+
+  .accordion { border:none; }
+  .accordion-toggle { font-family:var(--font-ja); font-size:0.85rem; color:var(--color-muted); cursor:pointer; list-style:none; transition:color 0.15s; }
+  .accordion-toggle:hover { color:var(--color-ink); }
+  .accordion[open] .accordion-toggle { color:var(--color-ink); }
+
+  .history-list { list-style:none; padding:0; margin:1rem 0 0; display:flex; flex-direction:column; gap:0.5rem; font-family:var(--font-latin); font-size:0.85rem; line-height:1.8; color:#444; }
+
+  .contact-email { font-family:var(--font-latin); font-size:0.9rem; color:var(--color-ink); }
+  .contact-email:hover { text-decoration:underline; }
+
+  .commercial-note { margin-top:1.5rem; font-family:var(--font-latin); font-size:0.8rem; color:var(--color-muted); }
+  .commercial-note a { text-decoration:underline; }
+</style>
