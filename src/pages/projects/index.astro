@@ -1,0 +1,119 @@
+---
+// src/pages/projects/index.astro
+import Site from '../../layouts/Site.astro';
+
+let projects: import('../../types').Project[] = [];
+try {
+  const { getProjects } = await import('../../lib/microcms');
+  projects = await getProjects();
+} catch {
+  // No credentials yet
+}
+---
+
+<Site title="Projects — YAGYU SHAW" currentPath="/projects">
+  <!-- Left: project list -->
+  <ul slot="left-list" class="project-list" role="list">
+    {projects.map((p) => (
+      <li class="project-item">
+        <a
+          href={`/projects/${p.id}`}
+          class="project-link"
+          data-cover={p.coverImage?.url ?? ''}
+          data-cover-alt={p.name}
+        >
+          {p.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <!-- Right: hover image layer (full-bleed, behind left col) -->
+  <div slot="right-content" class="hover-stage" aria-hidden="true">
+    <div class="hover-img-wrap" id="hover-img-wrap">
+      <img id="hover-img" src="" alt="" class="hover-img" />
+    </div>
+  </div>
+</Site>
+
+<style>
+  .project-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .project-link {
+    font-family: var(--font-ja);
+    font-size: 0.9rem;
+    color: var(--color-ink);
+    transition: color 0.15s;
+    display: block;
+  }
+
+  .project-link:hover {
+    color: var(--color-muted);
+  }
+
+  /* Hover image: full-bleed behind left col */
+  .hover-stage {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hover-img-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 1; /* behind left-col z-index:10 */
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .hover-img-wrap.visible {
+    opacity: 1;
+  }
+
+  .hover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 767px) {
+    .hover-stage { display: none; }
+  }
+</style>
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>('.project-link[data-cover]');
+  const wrap = document.getElementById('hover-img-wrap') as HTMLDivElement;
+  const img = document.getElementById('hover-img') as HTMLImageElement;
+
+  let preloaded = new Set<string>();
+
+  links.forEach((link) => {
+    const src = link.dataset.cover ?? '';
+    const alt = link.dataset.coverAlt ?? '';
+
+    if (src && !preloaded.has(src)) {
+      const pre = new Image();
+      pre.src = src;
+      preloaded.add(src);
+    }
+
+    link.addEventListener('mouseenter', () => {
+      if (!src) return;
+      img.src = src;
+      img.alt = alt;
+      wrap.classList.add('visible');
+    });
+
+    link.addEventListener('mouseleave', () => {
+      wrap.classList.remove('visible');
+    });
+  });
+</script>
