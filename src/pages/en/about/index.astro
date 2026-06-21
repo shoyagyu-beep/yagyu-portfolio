@@ -1,0 +1,78 @@
+---
+// src/pages/en/about/index.astro
+import Site from '../../../layouts/Site.astro';
+import ENToggle from '../../../components/ENToggle.astro';
+import { aboutJa } from '../../../data/about';
+
+const about = aboutJa;
+const sections = ['Biography', 'Statement', 'Exhibitions', 'Publications', 'Contact'];
+---
+
+<Site title="About — YAGYU SHAW" lang="en" currentPath="/en/about">
+  <ul slot="left-list" class="about-nav" role="list">
+    {sections.map((s) => (
+      <li><a href={`#${s}`} class="about-nav-link">{s}</a></li>
+    ))}
+  </ul>
+
+  <div slot="right-content" class="about-content">
+    <ENToggle currentLang="en" jaHref="/about" enHref="/en/about" />
+
+    <section id="Biography" class="about-section">
+      <h2 class="section-label">Biography</h2>
+      <p class="bio-text">{about.bioLongEn ?? about.bioLong}</p>
+    </section>
+
+    <section id="Statement" class="about-section">
+      <h2 class="section-label">Statement</h2>
+      <p class="bio-text">{about.artistStatementEn ?? about.artistStatement}</p>
+    </section>
+
+    <section id="Exhibitions" class="about-section">
+      <details class="accordion">
+        <summary class="accordion-toggle">＋ Exhibitions</summary>
+        <ul class="history-list">
+          {about.exhibitionHistory
+            .filter((ex) => ex.type === 'Exhibition')
+            .map((ex) => (
+              <li><time>{ex.date}</time> — {ex.title}{ex.venueOrPublisher && <span>, {ex.venueOrPublisher}</span>}</li>
+            ))}
+        </ul>
+      </details>
+    </section>
+
+    <section id="Publications" class="about-section">
+      <details class="accordion">
+        <summary class="accordion-toggle">＋ Publications</summary>
+        <ul class="history-list">
+          {about.exhibitionHistory
+            .filter((ex) => ['Book', 'Zine', 'Collaboration'].includes(ex.type))
+            .map((ex) => (
+              <li><time>{ex.date}</time> — {ex.title}{ex.venueOrPublisher && <span>, {ex.venueOrPublisher}</span>}</li>
+            ))}
+        </ul>
+      </details>
+    </section>
+
+    <section id="Contact" class="about-section">
+      <h2 class="section-label">Contact</h2>
+      <a href={`mailto:${about.contactEmail}`} class="contact-email">{about.contactEmail}</a>
+    </section>
+  </div>
+</Site>
+
+<style>
+  .about-nav { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.6rem; }
+  .about-nav-link { font-family:var(--font-latin); font-size:0.85rem; color:var(--color-muted); transition:color 0.15s; }
+  .about-nav-link:hover { color:var(--color-ink); }
+  .about-content { padding:2rem 2.5rem 4rem; max-width:640px; position:relative; height:100dvh; overflow-y:auto; }
+  .about-section { margin-bottom:3rem; }
+  .section-label { font-family:var(--font-latin); font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-muted); font-weight:400; margin:0 0 1rem; }
+  .bio-text { font-family:var(--font-latin); font-size:0.9rem; line-height:1.9; color:#333; margin:0; }
+  .accordion { border:none; }
+  .accordion-toggle { font-family:var(--font-latin); font-size:0.85rem; color:var(--color-muted); cursor:pointer; list-style:none; }
+  .accordion-toggle:hover { color:var(--color-ink); }
+  .history-list { list-style:none; padding:0; margin:1rem 0 0; display:flex; flex-direction:column; gap:0.5rem; font-family:var(--font-latin); font-size:0.85rem; line-height:1.8; color:#444; }
+  .contact-email { font-family:var(--font-latin); font-size:0.9rem; color:var(--color-ink); }
+  .contact-email:hover { text-decoration:underline; }
+</style>

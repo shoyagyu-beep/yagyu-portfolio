@@ -1,0 +1,30 @@
+---
+// src/pages/en/index.astro
+import Site from '../../layouts/Site.astro';
+
+let latestNote: { type: string; date: string } | undefined;
+try {
+  const { getNotes } = await import('../../lib/notion');
+  const notes = await getNotes();
+  latestNote = notes[0];
+} catch {
+  // No credentials yet
+}
+---
+
+<Site title="YAGYU SHAW" lang="en" currentPath="/en">
+  <div slot="left-list" class="home-left">
+    <p class="tagline">Works of Expression</p>
+    {latestNote && (
+      <a href="/notes" class="latest-note-link">→ Latest Note</a>
+    )}
+  </div>
+  <div slot="right-content"></div>
+</Site>
+
+<style>
+  .home-left { display:flex; flex-direction:column; gap:1.5rem; margin-top:0.5rem; }
+  .tagline { font-family:var(--font-latin); font-size:0.75rem; color:var(--color-muted); letter-spacing:0.05em; margin:0; }
+  .latest-note-link { font-family:var(--font-latin); font-size:0.8rem; color:var(--color-muted); transition:color 0.15s; }
+  .latest-note-link:hover { color:var(--color-ink); }
+</style>

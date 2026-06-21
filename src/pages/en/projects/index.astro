@@ -1,0 +1,60 @@
+---
+// src/pages/en/projects/index.astro
+import Site from '../../../layouts/Site.astro';
+import type { Project } from '../../../types';
+
+let projects: Project[] = [];
+try {
+  const { getProjects } = await import('../../../lib/microcms');
+  projects = await getProjects();
+} catch {
+  // No credentials yet
+}
+---
+
+<Site title="Projects — YAGYU SHAW" lang="en" currentPath="/en/projects">
+  <ul slot="left-list" class="project-list" role="list">
+    {projects.map((p) => (
+      <li>
+        <a
+          href={`/en/projects/${p.id}`}
+          class="project-link"
+          data-cover={p.coverImage?.url ?? ''}
+          data-cover-alt={p.nameEn ?? p.name}
+        >
+          {p.nameEn ?? p.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <div slot="right-content" class="hover-stage" aria-hidden="true">
+    <div class="hover-img-wrap" id="hover-img-wrap">
+      <img id="hover-img" src="" alt="" class="hover-img" />
+    </div>
+  </div>
+</Site>
+
+<style>
+  .project-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.6rem; }
+  .project-link { font-family:var(--font-latin); font-size:0.9rem; color:var(--color-ink); display:block; transition:color 0.15s; }
+  .project-link:hover { color:var(--color-muted); }
+  .hover-stage { position:absolute; inset:0; }
+  .hover-img-wrap { position:fixed; inset:0; z-index:1; pointer-events:none; opacity:0; transition:opacity 0.2s ease; }
+  .hover-img-wrap.visible { opacity:1; }
+  .hover-img { width:100%; height:100%; object-fit:cover; }
+  @media (max-width:767px) { .hover-stage { display:none; } }
+</style>
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>('.project-link[data-cover]');
+  const wrap = document.getElementById('hover-img-wrap') as HTMLDivElement;
+  const img = document.getElementById('hover-img') as HTMLImageElement;
+  links.forEach((link) => {
+    const src = link.dataset.cover ?? '';
+    const alt = link.dataset.coverAlt ?? '';
+    if (src) { const pre = new Image(); pre.src = src; }
+    link.addEventListener('mouseenter', () => { if (!src) return; img.src = src; img.alt = alt; wrap.classList.add('visible'); });
+    link.addEventListener('mouseleave', () => { wrap.classList.remove('visible'); });
+  });
+</script>
