@@ -15,7 +15,7 @@ export async function getNotes(): Promise<Note[]> {
       property: '公開フラグ',
       checkbox: { equals: true },
     },
-    sorts: [{ property: '日付', direction: 'descending' }],
+    sorts: [{ timestamp: 'created_time', direction: 'descending' }],
   });
 
   const notes = await Promise.all(
