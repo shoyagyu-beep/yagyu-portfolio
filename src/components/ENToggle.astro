@@ -1,0 +1,42 @@
+---
+// src/components/ENToggle.astro
+export interface Props {
+  currentLang: 'ja' | 'en';
+  jaHref: string;
+  enHref: string;
+}
+
+const { currentLang, jaHref, enHref } = Astro.props;
+---
+
+<div class="en-toggle">
+  {currentLang === 'ja' ? (
+    <a href={enHref} class="toggle-link">EN</a>
+  ) : (
+    <a href={jaHref} class="toggle-link">JA</a>
+  )}
+</div>
+
+<style>
+  .en-toggle {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 20;
+  }
+
+  .toggle-link {
+    font-family: var(--font-latin);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    border: 1px solid var(--color-faint);
+    padding: 0.2rem 0.5rem;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .toggle-link:hover {
+    color: var(--color-ink);
+    border-color: var(--color-muted);
+  }
+</style>
