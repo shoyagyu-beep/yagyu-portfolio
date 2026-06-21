@@ -1,0 +1,81 @@
+---
+// src/components/detail/PatternB.astro
+import type { Project } from '../../types';
+
+export interface Props {
+  project: Project;
+  lang?: 'ja' | 'en';
+}
+
+const { project: p, lang = 'ja' } = Astro.props;
+const summary = lang === 'en' && p.summaryEn ? p.summaryEn : p.summary;
+---
+
+<article class="detail-b">
+  <header class="detail-header">
+    <h1 class="project-name">{p.name}</h1>
+    {p.period && <p class="project-meta">{p.period}</p>}
+  </header>
+
+  {p.photos.length > 0 && (
+    <section class="photos">
+      {p.photos
+        .sort((a, b) => a.order - b.order)
+        .map((photo) => (
+          <figure class="photo-fig">
+            <img src={photo.url} alt={photo.caption ?? p.name} loading="lazy" />
+            {photo.caption && <figcaption>{photo.caption}</figcaption>}
+          </figure>
+        ))}
+    </section>
+  )}
+
+  {summary && (
+    <section class="summary">
+      <p>{summary}</p>
+    </section>
+  )}
+
+  {p.exhibitions && p.exhibitions.length > 0 && (
+    <section class="exhibitions">
+      <h2 class="section-heading">
+        {lang === 'en' ? 'Exhibitions & Publications' : '展示・出版歴'}
+      </h2>
+      <ul class="exhibition-list">
+        {p.exhibitions.map((ex) => (
+          <li>
+            <time>{ex.date}</time>
+            {' '}{ex.type}{' — '}{ex.title}
+            {ex.venueOrPublisher && <span>, {ex.venueOrPublisher}</span>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {p.credits && p.credits.length > 0 && (
+    <section class="credits">
+      <h2 class="section-heading">{lang === 'en' ? 'Credits' : 'クレジット'}</h2>
+      <ul class="credits-list">
+        {p.credits.map((person) => (
+          <li>{person.role}: {person.name}</li>
+        ))}
+      </ul>
+    </section>
+  )}
+</article>
+
+<style>
+  .detail-b { padding: 2rem 2.5rem 4rem; max-width: 680px; }
+  .detail-header { margin-bottom: 2rem; }
+  .project-name { font-family: var(--font-latin); font-size: 1.4rem; font-weight: 400; margin: 0 0 0.5rem; }
+  .project-meta { font-family: var(--font-latin); font-size: 0.8rem; color: var(--color-muted); margin: 0; }
+  .photos { margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
+  .photo-fig { margin: 0; }
+  .photo-fig img { width: 100%; height: auto; display: block; }
+  figcaption { font-family: var(--font-latin); font-size: 0.75rem; color: var(--color-muted); margin-top: 0.4rem; }
+  .summary { margin-bottom: 2.5rem; font-family: var(--font-ja); font-size: 0.9rem; line-height: 2; color: #333; }
+  .section-heading { font-family: var(--font-latin); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-muted); font-weight: 400; margin: 0 0 1rem; }
+  .exhibition-list, .credits-list { list-style: none; padding: 0; margin: 0; font-family: var(--font-latin); font-size: 0.85rem; line-height: 2; color: #444; }
+  .exhibitions, .credits { margin-bottom: 2rem; }
+</style>

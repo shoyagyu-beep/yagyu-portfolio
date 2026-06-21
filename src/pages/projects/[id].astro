@@ -1,0 +1,121 @@
+---
+// src/pages/projects/[id].astro
+import Site from '../../layouts/Site.astro';
+import ENToggle from '../../components/ENToggle.astro';
+import PatternA from '../../components/detail/PatternA.astro';
+import PatternB from '../../components/detail/PatternB.astro';
+import PatternC from '../../components/detail/PatternC.astro';
+import type { Project } from '../../types';
+
+export async function getStaticPaths() {
+  try {
+    const { getProjects } = await import('../../lib/microcms');
+    const projects = await getProjects();
+    return projects.map((p) => ({ params: { id: p.id } }));
+  } catch {
+    return [];
+  }
+}
+
+const { id } = Astro.params;
+
+let project: Project | null = null;
+let allProjects: Project[] = [];
+
+try {
+  const { getProjects, getProject } = await import('../../lib/microcms');
+  [project, allProjects] = await Promise.all([
+    getProject(id!),
+    getProjects(),
+  ]);
+} catch {
+  // No credentials
+}
+
+if (!project) return Astro.redirect('/projects');
+
+const idx = allProjects.findIndex((p) => p.id === id);
+const prev = idx > 0 ? allProjects[idx - 1] : null;
+const next = idx < allProjects.length - 1 ? allProjects[idx + 1] : null;
+---
+
+<Site
+  title={`${project.name} — YAGYU SHAW`}
+  currentPath={`/projects/${id}`}
+>
+  <ul slot="left-list" class="project-list" role="list">
+    {allProjects.map((p) => (
+      <li>
+        <a
+          href={`/projects/${p.id}`}
+          class:list={['project-link', { current: p.id === id }]}
+        >
+          {p.name}
+        </a>
+      </li>
+    ))}
+    <li class="prev-next">
+      {prev && <a href={`/projects/${prev.id}`}>← {prev.name}</a>}
+      {next && <a href={`/projects/${next.id}`}>{next.name} →</a>}
+    </li>
+  </ul>
+
+  <div slot="right-content" class="detail-wrap">
+    {project.statementEn && (
+      <ENToggle
+        currentLang="ja"
+        jaHref={`/projects/${id}`}
+        enHref={`/en/projects/${id}`}
+      />
+    )}
+
+    {project.pattern === 'A' && <PatternA project={project} lang="ja" />}
+    {project.pattern === 'B' && <PatternB project={project} lang="ja" />}
+    {project.pattern === 'C' && <PatternC project={project} lang="ja" />}
+  </div>
+</Site>
+
+<style>
+  .project-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .project-link {
+    font-family: var(--font-ja);
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    display: block;
+    transition: color 0.15s;
+  }
+
+  .project-link:hover,
+  .project-link.current {
+    color: var(--color-ink);
+  }
+
+  .prev-next {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-family: var(--font-latin);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+  }
+
+  .prev-next a:hover {
+    color: var(--color-ink);
+  }
+
+  .detail-wrap {
+    position: relative;
+    overflow-y: auto;
+    height: 100dvh;
+  }
+</style>
