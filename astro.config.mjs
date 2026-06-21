@@ -2,10 +2,13 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
+import cloudflare from '@astrojs/cloudflare';
+
 export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+
   i18n: {
     defaultLocale: 'ja',
     locales: ['ja', 'en'],
@@ -16,5 +19,7 @@ export default defineConfig({
       en: 'ja',
     },
   },
+
   output: 'static',
+  adapter: cloudflare(),
 });

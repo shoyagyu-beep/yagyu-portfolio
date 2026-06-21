@@ -32,3 +32,9 @@ pnpm-debug.log*
 # environment variable overrides
 .env.local
 .env.development
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
