@@ -9,7 +9,6 @@ const n2m = new NotionToMarkdown({ notionClient: notion });
 const DB_ID = import.meta.env.NOTION_NOTES_DATABASE_ID;
 
 export async function getNotes(): Promise<Note[]> {
-  // @ts-ignore
   const res = await notion.databases.query({
     database_id: DB_ID,
     filter: {

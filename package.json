@@ -12,7 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@notionhq/client": "^5.22.0",
+    "@notionhq/client": "^2.2.15",
     "@tailwindcss/vite": "^4.3.1",
     "astro": "^6.4.7",
     "microcms-js-sdk": "^3.4.0",
@@ -23,5 +23,9 @@
     "esbuild@0.27.7": true,
     "fsevents@2.3.3": true,
     "sharp@0.34.5": true
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^6.0.3"
   }
 }
