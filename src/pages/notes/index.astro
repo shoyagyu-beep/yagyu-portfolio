@@ -1,0 +1,120 @@
+---
+// src/pages/notes/index.astro
+import Site from '../../layouts/Site.astro';
+import type { Note } from '../../types';
+
+let notes: Note[] = [];
+try {
+  const { getNotes } = await import('../../lib/notion');
+  notes = await getNotes();
+} catch {
+  // No credentials yet
+}
+
+const first = notes[0];
+---
+
+<Site title="Notes — YAGYU SHAW" currentPath="/notes">
+  <ul slot="left-list" class="note-list" role="list">
+    {notes.map((note, i) => (
+      <li>
+        <a
+          href={`/notes/${note.id}`}
+          class:list={['note-link', { current: i === 0 }]}
+        >
+          <time class="note-date">{note.date}</time>
+          <span class="note-type">{note.type}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <div slot="right-content" class="note-body-wrap">
+    {first && (
+      <article class="note-body">
+        {first.title && <h1 class="note-title">{first.title}</h1>}
+        <div class="note-meta">
+          <time>{first.date}</time>
+          <span>{first.type}</span>
+        </div>
+        {first.photo && (
+          <img src={first.photo.url} alt="" class="note-photo" loading="lazy" />
+        )}
+        <div class="note-text" set:html={first.body} />
+      </article>
+    )}
+  </div>
+</Site>
+
+<style>
+  .note-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .note-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    transition: opacity 0.15s;
+  }
+
+  .note-link:not(.current) {
+    opacity: 0.5;
+  }
+
+  .note-date {
+    font-family: var(--font-latin);
+    font-size: 0.7rem;
+    color: var(--color-muted);
+  }
+
+  .note-type {
+    font-family: var(--font-ja);
+    font-size: 0.85rem;
+    color: var(--color-ink);
+  }
+
+  .note-body-wrap {
+    padding: 2rem 2.5rem 4rem;
+    max-width: 640px;
+    height: 100dvh;
+    overflow-y: auto;
+  }
+
+  .note-title {
+    font-family: var(--font-ja);
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: 0 0 0.5rem;
+  }
+
+  .note-meta {
+    font-family: var(--font-latin);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .note-photo {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 1.5rem;
+  }
+
+  .note-text {
+    font-family: var(--font-ja);
+    font-size: 0.9rem;
+    line-height: 2;
+    color: #333;
+  }
+
+  .note-text :global(p) { margin: 0 0 1rem; }
+</style>
