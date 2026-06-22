@@ -6,7 +6,7 @@ import Site from '../layouts/Site.astro';
 // credentials, gracefully handle the failure.
 let latestNote: { type: string; date: string } | undefined;
 try {
-  const { getNotes } = await import('../lib/notion');
+  const { getNotes } = await import('../lib/microcms');
   const notes = await getNotes();
   latestNote = notes[0];
 } catch {

@@ -5,7 +5,7 @@ import type { Note } from '../../types';
 
 export async function getStaticPaths() {
   try {
-    const { getNotes } = await import('../../lib/notion');
+    const { getNotes } = await import('../../lib/microcms');
     const notes = await getNotes();
     return notes.map((n) => ({ params: { id: n.id } }));
   } catch {
@@ -19,7 +19,7 @@ let note: Note | undefined;
 let allNotes: Note[] = [];
 
 try {
-  const { getNotes, getNote } = await import('../../lib/notion');
+  const { getNotes, getNote } = await import('../../lib/microcms');
   [note, allNotes] = await Promise.all([getNote(id!), getNotes()]);
 } catch {
   // No credentials

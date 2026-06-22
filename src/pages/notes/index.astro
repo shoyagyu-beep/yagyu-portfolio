@@ -5,7 +5,7 @@ import type { Note } from '../../types';
 
 let notes: Note[] = [];
 try {
-  const { getNotes } = await import('../../lib/notion');
+  const { getNotes } = await import('../../lib/microcms');
   notes = await getNotes();
 } catch {
   // No credentials yet
