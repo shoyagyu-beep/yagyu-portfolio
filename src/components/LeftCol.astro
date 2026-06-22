@@ -92,9 +92,17 @@ const nav = [
     flex-direction: column;
   }
 
-  /* Mobile: hide left col entirely */
+  /* Mobile: show list-slot only (logo + nav are in mobile-header/footer) */
   @media (max-width: 767px) {
     .left-col {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1.25rem 0;
+    }
+    .logo-link {
+      display: none;
+    }
+    .site-nav {
       display: none;
     }
   }
