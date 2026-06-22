@@ -49,6 +49,8 @@ const next = idx < allProjects.length - 1 ? allProjects[idx + 1] : null;
         <a
           href={`/projects/${p.id}`}
           class:list={['project-link', { current: p.id === id }]}
+          data-cover={p.coverImage?.url ?? ''}
+          data-cover-alt={p.name}
         >
           {p.name}
         </a>
@@ -61,6 +63,10 @@ const next = idx < allProjects.length - 1 ? allProjects[idx + 1] : null;
   </ul>
 
   <div slot="right-content" class="detail-wrap">
+    <div class="hover-img-wrap" id="hover-img-wrap" aria-hidden="true">
+      <img id="hover-img" src="" alt="" class="hover-img" />
+    </div>
+
     {project.statementEn && (
       <ENToggle
         currentLang="ja"
@@ -118,4 +124,53 @@ const next = idx < allProjects.length - 1 ? allProjects[idx + 1] : null;
     overflow-y: auto;
     height: 100dvh;
   }
+
+  .hover-img-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .hover-img-wrap.visible {
+    opacity: 1;
+  }
+
+  .hover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 767px) {
+    .hover-img-wrap { display: none; }
+  }
 </style>
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>('.project-link[data-cover]');
+  const wrap = document.getElementById('hover-img-wrap') as HTMLDivElement;
+  const img = document.getElementById('hover-img') as HTMLImageElement;
+
+  if (wrap && img) {
+    links.forEach((link) => {
+      const src = link.dataset.cover ?? '';
+      const alt = link.dataset.coverAlt ?? '';
+      if (src) {
+        const pre = new Image();
+        pre.src = src;
+      }
+      link.addEventListener('mouseenter', () => {
+        if (!src) return;
+        img.src = src;
+        img.alt = alt;
+        wrap.classList.add('visible');
+      });
+      link.addEventListener('mouseleave', () => {
+        wrap.classList.remove('visible');
+      });
+    });
+  }
+</script>

@@ -21,6 +21,12 @@ const isEn = lang === 'en';
     )}
   </header>
 
+  {p.startingQuestion && (
+    <section class="starting-question">
+      <p class="starting-question-text">{p.startingQuestion}</p>
+    </section>
+  )}
+
   {statement && (
     <section class="statement">
       <p>{statement}</p>
@@ -91,6 +97,19 @@ const isEn = lang === 'en';
 
   .detail-header {
     margin-bottom: 2rem;
+  }
+
+  .starting-question {
+    margin-bottom: 2rem;
+  }
+
+  .starting-question-text {
+    font-family: var(--font-ja);
+    font-size: 0.85rem;
+    line-height: 1.9;
+    color: var(--color-muted);
+    font-style: italic;
+    margin: 0;
   }
 
   .project-name {
