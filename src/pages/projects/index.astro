@@ -83,9 +83,6 @@ try {
     object-fit: cover;
   }
 
-  @media (max-width: 767px) {
-    .hover-stage { display: none; }
-  }
 </style>
 
 <script>
@@ -111,8 +108,16 @@ try {
       img.alt = alt;
       wrap.classList.add('visible');
     });
-
     link.addEventListener('mouseleave', () => {
+      wrap.classList.remove('visible');
+    });
+    link.addEventListener('touchstart', () => {
+      if (!src) return;
+      img.src = src;
+      img.alt = alt;
+      wrap.classList.add('visible');
+    }, { passive: true });
+    link.addEventListener('touchend', () => {
       wrap.classList.remove('visible');
     });
   });

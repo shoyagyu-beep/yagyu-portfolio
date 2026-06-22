@@ -144,9 +144,6 @@ const next = idx < allProjects.length - 1 ? allProjects[idx + 1] : null;
     object-fit: cover;
   }
 
-  @media (max-width: 767px) {
-    .hover-img-wrap { display: none; }
-  }
 </style>
 
 <script>
@@ -169,6 +166,15 @@ const next = idx < allProjects.length - 1 ? allProjects[idx + 1] : null;
         wrap.classList.add('visible');
       });
       link.addEventListener('mouseleave', () => {
+        wrap.classList.remove('visible');
+      });
+      link.addEventListener('touchstart', () => {
+        if (!src) return;
+        img.src = src;
+        img.alt = alt;
+        wrap.classList.add('visible');
+      }, { passive: true });
+      link.addEventListener('touchend', () => {
         wrap.classList.remove('visible');
       });
     });
