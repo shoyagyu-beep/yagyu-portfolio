@@ -30,7 +30,7 @@ export async function getNotes(): Promise<Note[]> {
         id: page.id,
         title: props['Title']?.title?.[0]?.plain_text ?? undefined,
         body,
-        date: props['日付']?.date?.start ?? page.created_time.slice(0, 10),
+        date: props['日時']?.date?.start ?? page.created_time.slice(0, 10),
         type: props['種別']?.select?.name ?? 'Daily',
         photo: photo
           ? { url: photo.file?.url ?? photo.external?.url ?? '', order: 0 }
