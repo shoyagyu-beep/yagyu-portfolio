@@ -53,6 +53,7 @@ const next = idx < allProjects.length - 1 ? allProjects[idx + 1] : null;
           data-cover-alt={p.name}
         >
           {p.name}
+          {p.category === 'commercial' && <span class="comm-label">comm.</span>}
         </a>
       </li>
     ))}
@@ -102,6 +103,14 @@ const next = idx < allProjects.length - 1 ? allProjects[idx + 1] : null;
   .project-link:hover,
   .project-link.current {
     color: var(--color-ink);
+  }
+
+  .comm-label {
+    font-family: var(--font-latin);
+    font-size: 0.65rem;
+    color: var(--color-muted);
+    margin-left: 0.4rem;
+    letter-spacing: 0.03em;
   }
 
   .prev-next {

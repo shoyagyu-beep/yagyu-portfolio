@@ -14,6 +14,7 @@ type CmsProject = {
   createdAt: string;
   name?: string;
   nameEn?: string;
+  category?: string[];
   pattern?: string[];
   period?: string;
   status?: string[];
@@ -37,6 +38,7 @@ function toProject(item: CmsProject): Project {
     id: item.id,
     name: item.name ?? '',
     nameEn: item.nameEn,
+    category: item.category?.[0] as 'art' | 'commercial' | undefined,
     period: item.period,
     status: item.status?.[0]?.trim() as ProjectStatus | undefined,
     showStatus: item.showStatus ?? false,

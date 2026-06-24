@@ -23,6 +23,7 @@ try {
           data-cover-alt={p.name}
         >
           {p.name}
+          {p.category === 'commercial' && <span class="comm-label">comm.</span>}
         </a>
       </li>
     ))}
@@ -56,6 +57,14 @@ try {
 
   .project-link:hover {
     color: var(--color-muted);
+  }
+
+  .comm-label {
+    font-family: var(--font-latin);
+    font-size: 0.65rem;
+    color: var(--color-muted);
+    margin-left: 0.4rem;
+    letter-spacing: 0.03em;
   }
 
   /* Hover image: full-bleed behind left col */

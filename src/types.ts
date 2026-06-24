@@ -34,6 +34,7 @@ export interface Project {
   id: string;
   name: string;
   nameEn?: string;
+  category?: 'art' | 'commercial';
   period?: string;
   status?: ProjectStatus;
   showStatus: boolean;
