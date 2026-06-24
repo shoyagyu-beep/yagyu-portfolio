@@ -16,6 +16,11 @@ try {
 }
 ---
 
+<!-- Intro overlay -->
+<div id="intro-overlay" aria-hidden="true">
+  <img src="/logo-intro.svg" alt="" class="intro-logo" />
+</div>
+
 <Site title="YAGYU SHAW" currentPath="/">
   <ul slot="left-list" class="home-list" role="list">
     {projects.map((p) => (
@@ -48,6 +53,28 @@ try {
 </Site>
 
 <style>
+  #intro-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.6s ease;
+  }
+
+  #intro-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .intro-logo {
+    height: 55vh;
+    width: auto;
+  }
+
   .home-list {
     list-style: none;
     padding: 0;
@@ -116,6 +143,17 @@ try {
     object-fit: cover;
   }
 </style>
+
+<script>
+  // Intro overlay: dismiss on click/tap or after 3s
+  const overlay = document.getElementById('intro-overlay');
+  if (overlay) {
+    const dismiss = () => overlay.classList.add('hidden');
+    overlay.addEventListener('click', dismiss);
+    overlay.addEventListener('touchend', dismiss);
+    setTimeout(dismiss, 3000);
+  }
+</script>
 
 <script>
   const links = document.querySelectorAll<HTMLAnchorElement>('.project-link[data-cover]');
