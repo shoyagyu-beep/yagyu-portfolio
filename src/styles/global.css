@@ -43,3 +43,14 @@ a {
 :lang(ja) {
   font-family: var(--font-ja);
 }
+
+.photos img,
+.process img,
+.timeline img,
+#lightbox-img,
+#hover-img {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+}

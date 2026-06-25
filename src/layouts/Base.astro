@@ -22,3 +22,15 @@ const { title = 'YAGYU SHAW', lang = 'ja' } = Astro.props;
     <slot />
   </body>
 </html>
+
+<script>
+  const protectedImg = '.photos img, .process img, .timeline img, #lightbox-img, #hover-img';
+
+  document.addEventListener('contextmenu', (e) => {
+    if ((e.target as HTMLElement).closest(protectedImg)) e.preventDefault();
+  });
+
+  document.addEventListener('dragstart', (e) => {
+    if ((e.target as HTMLElement).closest(protectedImg)) e.preventDefault();
+  });
+</script>
