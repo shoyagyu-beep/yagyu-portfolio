@@ -1,0 +1,62 @@
+---
+// src/components/Lightbox.astro
+---
+
+<div id="lightbox-overlay" class="lightbox-overlay" aria-hidden="true">
+  <img id="lightbox-img" class="lightbox-img" src="" alt="" />
+</div>
+
+<style>
+  .lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(0, 0, 0, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    cursor: zoom-out;
+  }
+
+  .lightbox-overlay.visible {
+    display: flex;
+  }
+
+  .lightbox-img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+</style>
+
+<script>
+  const overlay = document.getElementById('lightbox-overlay');
+  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+
+  if (overlay && lightboxImg) {
+    const open = (src: string, alt: string) => {
+      lightboxImg.src = src;
+      lightboxImg.alt = alt;
+      overlay.classList.add('visible');
+      document.documentElement.style.overflow = 'hidden';
+    };
+
+    const close = () => {
+      overlay.classList.remove('visible');
+      document.documentElement.style.overflow = '';
+    };
+
+    document.querySelectorAll<HTMLImageElement>('.photos .photo-fig img').forEach((img) => {
+      img.addEventListener('click', () => open(img.src, img.alt));
+    });
+
+    overlay.addEventListener('click', close);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+  }
+</script>

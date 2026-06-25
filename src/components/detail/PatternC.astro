@@ -1,6 +1,7 @@
 ---
 // src/components/detail/PatternC.astro
 import type { Project } from '../../types';
+import Lightbox from '../Lightbox.astro';
 
 export interface Props {
   project: Project;
@@ -61,6 +62,8 @@ const { project: p, lang = 'ja' } = Astro.props;
       </ul>
     </section>
   )}
+
+  <Lightbox />
 </article>
 
 <style>
@@ -74,7 +77,7 @@ const { project: p, lang = 'ja' } = Astro.props;
   .entry-photo { width: 100%; height: auto; display: block; margin-top: 0.75rem; }
   .photos { margin-bottom: 2.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
   .photo-fig { margin: 0; }
-  .photo-fig img { width: 100%; height: auto; display: block; }
+  .photo-fig img { width: 100%; height: auto; display: block; cursor: zoom-in; }
   figcaption { font-family: var(--font-latin); font-size: 0.75rem; color: var(--color-muted); margin-top: 0.4rem; }
   .question { margin-bottom: 2rem; }
   .question-text { font-family: var(--font-ja); font-size: 0.9rem; line-height: 1.9; color: #444; font-style: italic; }

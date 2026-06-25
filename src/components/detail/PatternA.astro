@@ -1,6 +1,7 @@
 ---
 // src/components/detail/PatternA.astro
 import type { Project } from '../../types';
+import Lightbox from '../Lightbox.astro';
 
 export interface Props {
   project: Project;
@@ -87,6 +88,8 @@ const isEn = lang === 'en';
       </ul>
     </section>
   )}
+
+  <Lightbox />
 </article>
 
 <style>
@@ -149,6 +152,7 @@ const isEn = lang === 'en';
     width: 100%;
     height: auto;
     display: block;
+    cursor: zoom-in;
   }
 
   figcaption {
